@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Shared.Contracts;
+using Shared.Exceptions;
 using UserService.Data;
 using UserService.Events;
 using UserService.Services;
@@ -22,12 +23,18 @@ builder.Services.AddScoped<IUsersService, UsersService>();
 builder.Services.AddHostedService<OrderConsumerService>();
 builder.Services.AddSingleton<IKafkaProducerWrapper, KafkaProducerWrapper>();
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
 
 //app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionMiddleware>();
+
+app.MapHealthChecks("/health");
 
 app.UseAuthorization();
 

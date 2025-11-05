@@ -12,7 +12,7 @@
 1. Add service health checks
 2. Add logging.
 3. Use TDD approach for a Comprehensive test coverage.
-4. Add retry, circuit breaker
+4. ~~Add retry, circuit breaker~~ 
 
 ### Assumptions
 1. Should the services have authentication and authorization? => Assumed no for simplicity.
@@ -99,6 +99,7 @@
 - Create a abstract base class for consumer classes with common methods.
 - my project structure is both UserService and OrderService at root level same as docker compose. Each service has their own dockerfile. but when run docker compose up -d it gives me error. service "userservice" has neither an image nor a build context specified: invalid compose project.
 - Im getting below error in my local setup. Confluent.Kafka.ConsumeException: 'Subscribed topic not available: order-created: Broker: Unknown topic or partition'
+- Use global exception middleware in asp.net web api.
 
 
                             

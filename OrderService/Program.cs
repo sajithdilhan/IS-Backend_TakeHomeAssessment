@@ -3,6 +3,7 @@ using OrderService.Data;
 using OrderService.Events;
 using OrderService.Services;
 using Shared.Contracts;
+using Shared.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ builder.Services.AddSingleton<IKafkaProducerWrapper, KafkaProducerWrapper>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrdersService, OrdersService>();
 builder.Services.AddHostedService<UserConsumerService>();
+builder.Services.AddHealthChecks();
 
 
 var app = builder.Build();
@@ -29,6 +31,9 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 //app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionMiddleware>();
+app.MapHealthChecks("/health");
 
 app.UseAuthorization();
 

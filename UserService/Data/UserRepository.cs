@@ -23,12 +23,13 @@ namespace UserService.Data
         public async Task<User?> GetUserByEmailAsync(string email)
         {
             return await _context.Users
-                .FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => string.Equals(u.Email, email, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public async Task<User?> GetUserByIdAsync(Guid id)
         {
-           return await _context.Users.FindAsync(id);
+            return await _context.Users.FindAsync(id);
         }
     }
 }

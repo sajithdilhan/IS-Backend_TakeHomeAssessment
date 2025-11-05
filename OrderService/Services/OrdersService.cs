@@ -53,13 +53,22 @@ public class OrdersService : IOrdersService
 
     public async Task<KnownUser> CreateKnownUserAsync(KnownUser knownUser)
     {
-        var existingUser = await _orderRepository.GetKnownUserByIdAsync(knownUser.UserId);
-        if (existingUser != null)
+        try
         {
-            return existingUser;
+            var existingUser = await _orderRepository.GetKnownUserByIdAsync(knownUser.UserId);
+            if (existingUser != null)
+            {
+                return existingUser;
+            }
+            _logger.LogInformation("Creating new known user with ID {UserId}", knownUser.UserId);
+            return await _orderRepository.CreateKnownUserAsync(knownUser);
         }
-        _logger.LogInformation("Creating new known user with ID {UserId}", knownUser.UserId);
-        return await _orderRepository.CreateKnownUserAsync(knownUser);
+        catch (Exception)
+        {
+            _logger.LogError("Error occurred while creating known user with ID {UserId}", knownUser.UserId);
+            throw;
+        }
+       
     }
 
     private async Task<bool> ValidateUser(Order order)
